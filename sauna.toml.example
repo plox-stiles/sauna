@@ -1,0 +1,7 @@
+owner = '12341234123412341'
+steamkey = '12341234123412341234123412341234'
+friends = [
+    'john117',
+    'https://steamcommunity.com/id/johnsprofile/',
+    '34561125302721235',
+]

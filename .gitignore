@@ -1,0 +1,7 @@
+sauna.toml
+sauna.log
+venv
+__pycache__
+.mypy_cache
+.vscode
+NOTES.md
