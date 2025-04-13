@@ -4,7 +4,7 @@
 # full license text.
 
 ''' steamapi.py - all related work to calling the steam API is here'''
-
+import time
 import logging
 import httpx
 from typing import Any, cast
@@ -25,6 +25,23 @@ class SteamAPI:
 
         pass
 
+    def send_api_request_rate_limited(
+            self,
+            url: str,
+            params: dict) -> httpx.Response:
+
+        '''When being rate limited attempt to retry the request'''
+        retrys = 5
+        resp = httpx.Response(429)
+        for i in range(retrys):
+            wait_time = i * 5
+            logging.info('rate-limited: waiting %d seconds', wait_time)
+            time.sleep(wait_time)
+            resp = httpx.get(url, params=params)
+            if resp.status_code == 200:
+                break
+        return resp
+
     def send_api_request(
             self,
             url: str,
@@ -35,6 +52,10 @@ class SteamAPI:
         logging.debug('sending get request: %s', url)
         resp = httpx.get(url, params=params)
         logging.debug('response status code: %d', resp.status_code)
+
+        if resp.status_code == 429:
+            logging.warning('rate limit hit, retrying slowly...')
+            resp = self.send_api_request_rate_limited(url, params)
 
         if resp.status_code != 200:
             logging.debug('response code: %s', resp.status_code)
@@ -119,6 +140,26 @@ class SteamAPI:
         logging.debug('summaries : %s', summaries)
 
         return summary_list
+
+    def get_owned_games(self, steamid: str) -> list[dict[str, str | int]]:
+
+        '''returns a list of games a player owns'''
+
+        params = {
+            'steamid': steamid,
+            'include_appinfo': 1,
+            'include_played_free_games': 1,
+            'key': self.steam_key,
+        }
+
+        url = (
+            'http://api.steampowered.com/'
+            'IPlayerService/GetOwnedGames/v0001/'
+        )
+
+        resp = self.send_api_request(url, params)
+        games = resp['response']['games']
+        return games
 
 
 class PlayerSummary():

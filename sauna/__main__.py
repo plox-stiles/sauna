@@ -44,7 +44,11 @@ def main():
     # in the sauna config
     filtered_summaries = util.filter_summaries(summaries, config['friends'])
 
-    print(filtered_summaries)
+    # pair player summary with their game library
+    player_summary_and_library = []
+    for s in filtered_summaries:
+        lib = steam.get_owned_games(s['steamid'])
+        player_summary_and_library.append((s, lib))
 
 
 if __name__ == '__main__':
