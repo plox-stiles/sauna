@@ -80,7 +80,10 @@ class SteamAPI:
 
         return cast(list[dict[str, str | int]], friends)
 
-    def get_player_summaries(self, steamids: list[str] | str):
+    def get_player_summaries(
+            self,
+            steamids: list[str] | str
+            ) -> list[dict[str, str | int]]:
 
         '''Get a steam players summary'''
 
@@ -109,10 +112,13 @@ class SteamAPI:
 
         summaries = self.send_api_request(url, params)
 
+        summaries = summaries['response']['players']
+        summary_list = cast(list[dict[str, str | int]], summaries)
+
         logging.info('retrieved player summaries')
         logging.debug('summaries : %s', summaries)
 
-        return summaries
+        return summary_list
 
 
 class PlayerSummary():

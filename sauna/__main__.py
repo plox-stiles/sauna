@@ -42,7 +42,10 @@ def main():
 
     # filter summaries to only have the ones listed
     # in the sauna config
-    
+    filtered_summaries = util.filter_summaries(summaries, config['friends'])
+
+    print(filtered_summaries)
+
 
 if __name__ == '__main__':
     main()

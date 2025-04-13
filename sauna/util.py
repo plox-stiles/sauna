@@ -8,6 +8,8 @@
 from pathlib import Path
 import logging
 import tomllib
+from itertools import chain
+from typing import Any
 
 SAUNAROOT = Path(Path(__file__).parent).parent
 SAUNACONFIG_FILENAME = 'sauna.toml'
@@ -47,3 +49,25 @@ def parse_config() -> dict:
         raise e
 
     return conf
+
+
+def filter_summaries(
+        summaries: list[dict[str, Any]],
+        config_friends: list[str]) -> list[dict]:
+
+    '''filter all the summaries to match the ones that are only in
+    config'''
+
+    filtered = []
+    for f in config_friends:
+        s = [x for x in summaries if f in x.values()]
+        if len(s) > 1:
+            logging.warning('filter_summaries: duplicate found: %s', s)
+
+        if len(s) <= 0:
+            logging.warning('filter_sumarries: config friend not found: %s', f)
+
+        filtered.append(s)
+
+    # flatten lists inside filtered, returns duplicates and or empty list
+    return list(chain.from_iterable(filtered))
