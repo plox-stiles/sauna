@@ -53,7 +53,7 @@ def parse_config() -> dict:
 
 def filter_summaries(
         summaries: list[dict[str, Any]],
-        config_friends: list[str]) -> list[dict]:
+        config_friends: list[str]) -> list[dict[str, str | int]]:
 
     '''remove summaries that are not from friends defined in sauna config'''
 
@@ -85,7 +85,10 @@ def trim_summary_names(summary: dict) -> dict:
 
     trim_summary = {}
     for k in keys:
-        trim_summary[k] = summary[k]
+        try:
+            trim_summary[k] = summary[k]
+        except KeyError:
+            trim_summary[k] = ''
     return trim_summary
 
 
