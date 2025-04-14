@@ -55,8 +55,7 @@ def filter_summaries(
         summaries: list[dict[str, Any]],
         config_friends: list[str]) -> list[dict]:
 
-    '''filter all the summaries to match the ones that are only in
-    config'''
+    '''remove summaries that are not from friends defined in sauna config'''
 
     filtered = []
     for f in config_friends:
@@ -71,3 +70,37 @@ def filter_summaries(
 
     # flatten lists inside filtered, returns duplicates and or empty list
     return list(chain.from_iterable(filtered))
+
+
+def trim_summary_names(summary: dict) -> dict:
+
+    '''trim everything except id, names, avatar, profile'''
+    keys = [
+        'steamid',
+        'personaname',
+        'profileurl',
+        'avatarfull',
+        'realname',
+        ]
+
+    trim_summary = {}
+    for k in keys:
+        trim_summary[k] = summary[k]
+    return trim_summary
+
+
+def filter_unique_games(libraries: list[list[dict[str, str | int]]]
+                        ) -> set[int]:
+
+    '''pass in a list of game libraries and return a set of the games
+    app ids that all accounts have'''
+
+    appids: list[set] = []
+    for lib in libraries:
+        ids = set(game['appid'] for game in lib)
+        appids.append(ids)
+
+    # intersection will reduce the elements to ids all sets share,
+    common: set = set.intersection(*appids)
+
+    return common

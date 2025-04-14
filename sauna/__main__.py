@@ -40,8 +40,7 @@ def main():
     # query all friends player summaries
     summaries = steam.get_player_summaries(friend_ids)
 
-    # filter summaries to only have the ones listed
-    # in the sauna config
+    # remove summaries that are not from friends defined in sauna config
     filtered_summaries = util.filter_summaries(summaries, config['friends'])
 
     # pair player summary with their game library
