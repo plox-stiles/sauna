@@ -19,13 +19,17 @@ import json
 
 def main():
 
+    # main entry point
     '''saunas entry point'''
 
+    # print title to screen
     print('sauna - version 0.0.1')
 
+    # dtart logging
     util.start_logging()
     config = util.parse_config()
 
+    # get config and prepare steamapi caller
     owner = config['owner']
     steamkey = config['steamkey']
     steam = SteamAPI(steamkey)

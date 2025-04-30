@@ -5,3 +5,5 @@ __pycache__
 .mypy_cache
 .vscode
 NOTES.md
+games.json
+suana.db
