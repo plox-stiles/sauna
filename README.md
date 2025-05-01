@@ -8,7 +8,7 @@ Your friends list must be made public, and friends have to make their games owne
 
 After installing just run
 
-`sauna --output games.json`
+`sauna`
 
 Without installing run the package from inside the repo folder
 

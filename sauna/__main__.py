@@ -14,7 +14,6 @@
 
 from sauna import util
 from sauna.steamapi import SteamAPI
-import json
 
 
 def main():
@@ -52,33 +51,9 @@ def main():
         s = util.trim_summary_names(s)
         trimmed_summaries.append(s)
 
-    # pair player summary with their game library
-    player_summary_and_library = []
-    for s in trimmed_summaries:
-        id = str(s['steamid'])
-        lib = steam.get_owned_games(id)
-        player_summary_and_library.append((s, lib))
-
-    # get a list of games that all friends own
-    libraries = [x[1] for x in player_summary_and_library]
-    unique_appids = util.filter_unique_games(libraries)
-
-    out = {
-        'players': [],
-        'shared': [],
-    }
-
-    for player_data in player_summary_and_library:
-        out['players'].append(player_data)
-
-    # convert set to regular list
-    out['shared'] = [x for x in unique_appids]
-
-    with open('games.json', 'w', encoding='utf-8') as f:
-        j = json.dumps(out)
-        f.write(j)
-
-    print('complete')
+    # pipe player summaries to here and it will aggregate all the
+    # data to create a nice html page for you to share
+    util.create_html(trimmed_summaries)
 
 
 if __name__ == '__main__':

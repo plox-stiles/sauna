@@ -10,6 +10,8 @@ import logging
 import tomllib
 from itertools import chain
 from typing import Any
+from sauna.steamapi import SteamAPI
+import json
 
 SAUNAROOT = Path(Path(__file__).parent).parent
 SAUNACONFIG_FILENAME = 'sauna.toml'
@@ -107,3 +109,31 @@ def filter_unique_games(libraries: list[list[dict[str, str | int]]]
     common: set = set.intersection(*appids)
 
     return common
+
+
+def create_html(player_summaries: list[dict]):
+
+    '''creates a nice formatted way of showing the players profiles
+    and they games they all share'''
+
+    player_info = {}
+
+    config = parse_config()
+    steam = SteamAPI(config['steamkey'])
+
+    for summary in player_summaries:
+        steamid = summary['steamid']
+        library = steam.get_owned_games(steamid)
+
+        info = {
+            'library': library,
+            'summary': summary,
+        }
+
+        player_info[steamid] = info
+
+    with open('data.json', 'w') as f:
+        w = json.dumps(player_info)
+        f.write(w)
+
+    print('finished writing player data')

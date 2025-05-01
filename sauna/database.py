@@ -25,7 +25,8 @@ class Base(pwe.Model):
 class Users(Base):
 
     '''represents the data you would get from GetPlayerSummaries API call
-    https://developer.valvesoftware.com/wiki/Steam_Web_API#GetPlayerSummaries_(v0002)'''
+    https://developer.valvesoftware.com/
+    wiki/Steam_Web_API#GetPlayerSummaries_(v0002)'''
 
     steamid = pwe.TextField(primary_key=True)
     communityvisibilitystate = pwe.IntegerField()
@@ -57,6 +58,7 @@ class Games(Base):
     movies = pwe.TextField()  # space seperated field of movie urls
     screenshots = pwe.TextField()  # space seperated field of screenshots
     json = pwe.TextField()
+
 
 def initalize():
 

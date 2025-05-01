@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sauna</title>
+    <style>
+        * {
+            padding:0;
+            margin:0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #page-header{
+            padding:120px 20px;
+        }
+
+        #title {
+            font-size:3em;
+            text-decoration: underline;
+            padding-bottom :10px;
+        }
+
+        .container {
+            padding:20px;
+        }
+
+        .bg-dark {
+            background-color: rgba(25, 25, 25, 1);
+        }
+
+        .text-light {
+            color:white;
+        }
+
+        #profiles {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .profile-card {
+            width: 30%;
+            padding:25px;
+            margin:5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .profile-card:hover {
+            box-shadow: 3px 4px 5px 0px rgba(0,0,0,0.75);
+            -webkit-box-shadow: 3px 4px 5px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 3px 4px 5px 0px rgba(0,0,0,0.75);
+        }
+
+        #summary-profileurl {
+            text-decoration: none;
+        }
+
+        #summary-profileurl:visited {
+            color:white;
+        }
+
+        #summary-profileurl > * {
+            padding:5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- page header -->
+    <div id="page-header" class="container bg-dark text-light">
+        <h1 id="title">Sauna - Alpha</h1>
+        <p>Is it getting hot in here?</p>
+    </div>
+    <!-- display steam profiles -->
+    <div class="container">
+        <h1>Profiles</h1>
+        <div id="profiles" class="container">
+            <template id="profiles-template">
+                <div class="profile-card bg-dark text-light">
+                    <a id="summary-profileurl" href="">
+                        <h3 id="summary-personaname">name</h3>
+                        <h4 id="summary-realname">realname</h4>
+                        <img src="" alt="steam profile avatar" id="summary-avatarfull">
+                        <p id="summary-steamid">steamid</p>
+                    </a>
+                </div>
+            </template>
+        </div>
+    </div>
+    <!-- display common games -->
+     <div class="container bg-dark text-light">
+        <h1>Games</h1>
+        <div class="container" id="games">
+        </div>
+     </div>
+
+     <script src="data.js"></script>
+     <script src="template.js"></script>
+</body>
+</html>
