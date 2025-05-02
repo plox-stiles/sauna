@@ -24,7 +24,7 @@ def main():
     # print title to screen
     print('sauna - version 0.0.1')
 
-    # dtart logging
+    # start logging
     util.start_logging()
     config = util.parse_config()
 
