@@ -1,14 +1,10 @@
-// This relies on the sauna python script to generate the **data.js** file
-// so we have GEN_DATA to work with otherwise the global reference to
-// GEN_DATA is worthless
-
-function printSummaries(){
+function printSummaries(sauna_data){
 
     var template_collection = [];
     // parse player summary json into html template node
-    for (steamid in GEN_DATA){
+    for (steamid in sauna_data){
         var template = document.querySelector("#profiles-template").content.cloneNode(true);
-        let summ = GEN_DATA[steamid].summary;
+        let summ = sauna_data[steamid].summary;
         template.querySelector('#summary-steamid').textContent = summ.steamid;
         template.querySelector('#summary-personaname').textContent = summ.personaname;
         template.querySelector('#summary-profileurl').href = summ.profileurl;
@@ -26,14 +22,14 @@ function printSummaries(){
 }
 
 
-async function enumerateGames() {
+async function enumerateGames(sauna_data) {
 
     // read json to get all the appids in everyones library then
     // populate all the info from the games provided and display it
 
     let library_collection = [];
-    Object.keys(GEN_DATA).forEach((steamid) => {
-        library_collection.push(GEN_DATA[steamid]['library']);
+    Object.keys(sauna_data).forEach((steamid) => {
+        library_collection.push(sauna_data[steamid]['library']);
     });
     // flatten 2d array
     library_collection = library_collection.flat();
@@ -70,5 +66,17 @@ async function enumerateGames() {
 }
 
 // ENTRY POINT
-printSummaries();
-enumerateGames();
+let sauna_data = null;
+try {
+    const res = await fetch('/sauna/v1/pool');
+    sauna_data = await res.json();
+} catch (err) {
+    console.error(err);
+    return;
+}
+
+console.log(sauna_data);
+return;
+
+printSummaries(sauna_data);
+enumerateGames(sauna_data);

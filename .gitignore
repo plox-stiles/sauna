@@ -7,4 +7,4 @@ __pycache__
 NOTES.md
 games.json
 suana.db
-sauna/template/data.js
+sauna/static/sauna.json

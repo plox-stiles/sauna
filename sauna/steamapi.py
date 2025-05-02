@@ -161,6 +161,25 @@ class SteamAPI:
         games = resp['response']['games']
         return games
 
+    def get_game_info(self, appid: str) -> dict:
+
+        '''pass in an appid and return the json as a dict'''
+
+        url = (
+            f"https://store.steampowered.com/"
+            f"api/appdetails?appids={appid}"
+        )
+
+        params = {'appids': appid}
+        resp = self.send_api_request(url, params)
+
+        # if bad request like invalid appid comes in
+        # we will still get a success on response
+        if not resp[appid]['success']:
+            return {}
+
+        return resp[appid]['data']
+
 
 class PlayerSummary():
 

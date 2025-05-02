@@ -33,7 +33,7 @@ def main():
     steamkey = config['steamkey']
     steam = SteamAPI(steamkey)
 
-    # TODO ensure the owners profile is public
+    # TODO ensure the owners profile is public so we can read friends lists
 
     # get the users entire friend list
     friends = steam.get_friend_list(owner)
@@ -51,9 +51,18 @@ def main():
         s = util.trim_summary_names(s)
         trimmed_summaries.append(s)
 
-    # pipe player summaries to here and it will aggregate all the
-    # data to create a nice html page for you to share
-    util.create_html(trimmed_summaries)
+    # from here we have most data and we can send the collection
+    # of summaries to an output convertor or send it off to process
+    # more data locally since the actual game info has not been populated
+
+    # for now its just going to convert data the data into json and place it
+    # in a static assets folder to be served by a web client.
+
+    # doing this in order to have a pause on the project but at least show
+    # have a way to nicely show the data
+
+    util.convert_summary_web_asset(trimmed_summaries)
+    print('web asset sauna.json created.')
 
 
 if __name__ == '__main__':

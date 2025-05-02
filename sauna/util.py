@@ -94,8 +94,7 @@ def trim_summary_names(summary: dict) -> dict:
     return trim_summary
 
 
-def filter_unique_games(libraries: list[list[dict[str, str | int]]]
-                        ) -> set[int]:
+def filter_unique_games(libraries: list) -> set[int]:
 
     '''pass in a list of game libraries and return a set of the games
     app ids that all accounts have'''
@@ -111,18 +110,20 @@ def filter_unique_games(libraries: list[list[dict[str, str | int]]]
     return common
 
 
-def create_html(player_summaries: list[dict]):
+def convert_summary_web_asset(player_summaries: list[dict]):
 
-    '''creates a nice formatted way of showing the players profiles
-    and they games they all share'''
+    '''TODO define more concrete types to make data structure more obvious
+    convert a *summary* into something that will be used by '''
 
-    player_info = {}
+    player_data = []
 
     config = parse_config()
     steam = SteamAPI(config['steamkey'])
 
+    # iterate through steam ids to get players game libraries
     for summary in player_summaries:
         steamid = summary['steamid']
+        # get game library
         library = steam.get_owned_games(steamid)
 
         info = {
@@ -130,10 +131,17 @@ def create_html(player_summaries: list[dict]):
             'summary': summary,
         }
 
-        player_info[steamid] = info
+        player_data.append(info)
 
-    with open('data.json', 'w') as f:
-        w = json.dumps(player_info)
-        f.write(w)
+    # get only the games they all have
+    all_libs = [p['library'] for p in player_data]
+    unique_games = filter_unique_games(all_libs)
+    games = [x for x in unique_games]  # convert set to array
+    sauna_data = {
+        'players': player_data,
+        'unique_games': games,
+    }
 
-    print('finished writing player data')
+    fname = Path(__file__).resolve().parent / 'static' / 'sauna.json'
+    with open(fname, 'w') as f:
+        f.write(json.dumps(sauna_data))
