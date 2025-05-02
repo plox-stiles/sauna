@@ -2,9 +2,9 @@ function printSummaries(sauna_data){
 
     var template_collection = [];
     // parse player summary json into html template node
-    for (steamid in sauna_data){
+    for (player_id in sauna_data['players']){
         var template = document.querySelector("#profiles-template").content.cloneNode(true);
-        let summ = sauna_data[steamid].summary;
+        let summ = sauna_data['players'][player_id]['summary']
         template.querySelector('#summary-steamid').textContent = summ.steamid;
         template.querySelector('#summary-personaname').textContent = summ.personaname;
         template.querySelector('#summary-profileurl').href = summ.profileurl;
@@ -27,27 +27,9 @@ async function enumerateGames(sauna_data) {
     // read json to get all the appids in everyones library then
     // populate all the info from the games provided and display it
 
-    let library_collection = [];
-    Object.keys(sauna_data).forEach((steamid) => {
-        library_collection.push(sauna_data[steamid]['library']);
-    });
-    // flatten 2d array
-    library_collection = library_collection.flat();
-
-    // remove duplicate games
-    let unique_collection = Array.from(
-        new Map(
-            library_collection.map(
-                obj => [obj.appid, obj]
-            )
-        ).values()
-    );
-
-    console.log(unique_collection)
-
     // send api request to get appid info
-    for (app in unique_collection) {
-        let url = `https://store.steampowered.com/api/appdetails?appids=${app}`;
+    for (app in sauna_data['unique_games']) {
+        let url = `sauna/v1/store/${app}`;
 
         console.log(`API Steam Store : ${url}`)
 
@@ -65,18 +47,20 @@ async function enumerateGames(sauna_data) {
     }
 }
 
-// ENTRY POINT
-let sauna_data = null;
-try {
-    const res = await fetch('/sauna/v1/pool');
-    sauna_data = await res.json();
-} catch (err) {
-    console.error(err);
-    return;
+async function main() {
+    let sauna_data = null;
+    try {
+        const res = await fetch('/sauna/v1/pool');
+        sauna_data = await res.json();
+    } catch (err) {
+        console.error(err);
+        return;
+    }
+
+    console.log(sauna_data);
+
+    printSummaries(sauna_data);
+    enumerateGames(sauna_data);
 }
 
-console.log(sauna_data);
-return;
-
-printSummaries(sauna_data);
-enumerateGames(sauna_data);
+main();

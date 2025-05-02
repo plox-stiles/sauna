@@ -28,6 +28,12 @@ def main():
     util.start_logging()
     config = util.parse_config()
 
+    # check flag to redirect control flow to
+    # run the webserver instead if asset was
+    # created already
+    if config['web-static']:
+        pass
+
     # get config and prepare steamapi caller
     owner = config['owner']
     steamkey = config['steamkey']
