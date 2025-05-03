@@ -12,11 +12,11 @@ import json
 
 from flask import Flask, send_from_directory, jsonify, Response
 
-# from sauna.steamapi import SteamAPI
-# from sauna.util import parse_config
+from sauna.steamapi import SteamAPI
+from sauna.util import parse_config
 
-# conf = parse_config()
-# steam = SteamAPI(conf['steamkey'])
+conf = parse_config()
+steam = SteamAPI(conf['steamkey'])
 app = Flask(__name__, static_folder='static')
 STATIC_SAUNA_LOC = Path(__file__).resolve().parent / 'static' / 'sauna.json'
 STATIC_SAUNA_DATA = Response()
@@ -50,10 +50,7 @@ def serve_store(appid):
 
     '''handles proxying the connection between the web page and
     the steam powered server'''
-    # TODO need to wrap this in an async wrapper
-    # this uses httpx.get() which is IO blocking
-    # flask from running properly
-    # return jsonify(steam.get_game_info(appid))
+
     return Response()
 
 
